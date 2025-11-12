@@ -10,11 +10,14 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SpriteRenderer renderer = GetComponentInChildren<SpriteRenderer>();
         Vector2 colliderSize = GetComponent<BoxCollider>().size;
 
-        transform.localScale = Utilities.GetScreenScale(colliderSize, transform.localScale);
+        transform.localScale = Utilities.GetScreenScale(renderer, transform.localScale);
 
-        colliderSize *= transform.localScale / 2;
+        colliderSize.x *= transform.localScale.x;
+        colliderSize.y *= transform.localScale.y;
+        colliderSize /= 2f;
 
         input = GetComponent<PlayerInput>();
         input.actions["Move"].performed += Move;

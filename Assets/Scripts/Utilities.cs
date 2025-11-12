@@ -4,11 +4,11 @@ using UnityEngine.UIElements;
 static public class Utilities
 {
     static Vector2 defaultSize = new Vector2(1242, 2688);
-    static public Vector3 GetScreenScale(Vector2 size, Vector2 defaultScale)
+    static public Vector3 GetScreenScale(SpriteRenderer _spriteRenderer, Vector2 defaultScale)
     {
         Vector3 scale = Vector3.one;
-        float spriteWidth = size.x;
-        float spriteHeight = size.y;
+        float spriteWidth = _spriteRenderer.sprite.bounds.size.x;
+        float spriteHeight = _spriteRenderer.sprite.bounds.size.y;
 
         // Cam size
         float worldScreenHeight = Camera.main.orthographicSize * 2f;
