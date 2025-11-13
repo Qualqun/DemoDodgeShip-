@@ -10,11 +10,9 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Vector2 colliderSize = GetComponent<BoxCollider>().size;
+        Vector2 spriteSize = GetComponentInChildren<SpriteRenderer>().size;
 
-        transform.localScale = Utilities.GetScreenScale(colliderSize, transform.localScale);
-
-        colliderSize *= transform.localScale / 2;
+        transform.localScale = Utilities.GetScreenScale(spriteSize, transform.localScale);
 
         input = GetComponent<PlayerInput>();
         input.actions["Move"].performed += Move;
@@ -23,7 +21,8 @@ public class PlayerController : MonoBehaviour
         worldScreenSize.x = worldScreenSize.y / Screen.height * Screen.width;
 
         //Removes the size of the collider /2
-        worldScreenSize -= colliderSize;
+        spriteSize *= transform.localScale / 2;
+        worldScreenSize -= spriteSize;
     }
 
     void Move(InputAction.CallbackContext _context)

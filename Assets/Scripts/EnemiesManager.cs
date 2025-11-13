@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour
@@ -6,8 +7,13 @@ public class EnemiesManager : MonoBehaviour
 
     [SerializeField] EnemyBehaviour enemy;
     [SerializeField] Vector2 worldScreenSize;
+    [SerializeField] float speedLerp = 1f;
+    [SerializeField] float nextShoot = 2f;
 
     Vector2 colliderSize;
+
+    List<EnemyBehaviour> enemies = new List<EnemyBehaviour>();
+    IEnumerator enemiesCouroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,7 +25,7 @@ public class EnemiesManager : MonoBehaviour
         worldScreenSize.y = Camera.main.orthographicSize - colliderSize.y / 2; // don't need to multiply x2 bcs the camera is centred
         worldScreenSize.x = worldScreenSize.y / Screen.height * Screen.width - colliderSize.x / 2;
 
-        StartCoroutine(TestRand());
+        StartCoroutine(SpawnEnemies());
     }
 
     // Update is called once per frame
@@ -52,19 +58,29 @@ public class EnemiesManager : MonoBehaviour
             enemyPos.y = pos.y;
         }
 
-
         return pos;
     }
 
-    IEnumerator TestRand()
+    IEnumerator SpawnEnemies()
     {
         while (true)
         {
-            Vector2 randPos = GetRandPosAroundScreen(out Vector2 spawnPos);
+            Vector2 endPos = GetRandPosAroundScreen(out Vector2 spawnPos);
+            EnemyBehaviour tempEnemy = Instantiate(enemy, spawnPos, Quaternion.identity, transform);
 
-            Instantiate(enemy, spawnPos, Quaternion.identity).SetEndPos(randPos);
+            tempEnemy.SetEndPos(endPos);
+            tempEnemy.SetSpeedLerp(1f);
 
-            yield return new WaitForSeconds(0.25f);
+            enemies.Add(tempEnemy);
+
+            yield return new WaitForSeconds(speedLerp * 2);
+
+            foreach (EnemyBehaviour enemy in enemies)
+            {
+                enemy.Shoot(nextShoot);
+            }
+
+            yield return new WaitForSeconds(nextShoot);
         }
     }
 }
