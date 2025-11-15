@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 static public class Utilities
 {
     static Vector2 defaultSize = new Vector2(1242, 2688);
+
+
+    static public int maxScore = 0;
     static public Vector3 GetScreenScale(Vector2 size, Vector2 defaultScale)
     {
         Vector3 scale = Vector3.one;
